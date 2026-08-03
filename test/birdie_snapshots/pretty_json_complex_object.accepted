@@ -1,0 +1,27 @@
+---
+version: 2.0.2
+title: pretty_json_complex_object
+file: ./test/json_value_formatter_test.gleam
+test_name: pretty_json_object_test
+---
+{
+  "bar": { "1": "3", "2": "4" },
+  "empty": {},
+  "foo": "bar",
+  "key": [
+    {
+      "some_numbers": [ 1, 2, 4, 5, 6, 7, 8, 9 ],
+      "wibble": "wobble"
+    }
+  ],
+  "key2": [
+    null,
+    {
+      "some_numbers": [ 1, 2, 4, 5, 6, 7, 8, 9 ],
+      "wibble": "wobble"
+    }
+  ],
+  "tags": [ "hello", "hello", "hello", "hello" ],
+  "times": [ 1, 2, 4, 5, 6, 7, 8, 9 ],
+  "wibble": "wobble"
+}

@@ -1,0 +1,7 @@
+---
+version: 2.0.2
+title: pretty_json_empty_object
+file: ./test/json_value_formatter_test.gleam
+test_name: pretty_json_empty_object_test
+---
+{}
