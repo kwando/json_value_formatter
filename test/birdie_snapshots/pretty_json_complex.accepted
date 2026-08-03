@@ -64,5 +64,10 @@ title: pretty_json_complex
       { "id": "5004", "type": "Maple" }
     ],
     "type": "donut"
-  }
+  },
+  [
+    {
+      "scores": [ 1, 23, 424, 241, 13, 42, 2123 ]
+    }
+  ]
 ]
