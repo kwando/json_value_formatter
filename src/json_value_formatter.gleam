@@ -91,13 +91,13 @@ const json_value_names = FunctionNames(
 /// Generates formatted Gleam source that reconstructs a JSON value with `gleam/json`.
 pub fn to_json_code(json_value: JsonValue) -> String {
   do_to_json(json_value, json_names)
-  |> doc.to_string(120)
+  |> doc.to_string(80)
 }
 
 /// Generates formatted Gleam source that reconstructs a JSON value with `json_value`.
 pub fn to_json_value_code(json_value: JsonValue) -> String {
   do_to_json(json_value, json_value_names)
-  |> doc.to_string(120)
+  |> doc.to_string(80)
 }
 
 type FunctionNames {
