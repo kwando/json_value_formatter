@@ -1,13 +1,14 @@
 import glam/doc.{type Document}
+import gleam/bit_array
 import gleam/bool
 import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/list
-import gleam/string
 import json_value.{type JsonValue}
 
-pub fn pretty_json_string(json_value: JsonValue) -> String {
+/// Renders a JSON value as formatted JSON with a line width of 50 characters.
+pub fn to_pretty_json_string(json_value: JsonValue) -> String {
   do_pretty_json_string(json_value, 0)
   |> doc.to_string(50)
 }
@@ -65,51 +66,95 @@ fn quoted_string(input: String) -> Document {
   doc.from_string("\"" <> input <> "\"")
 }
 
-pub fn to_json(json_value: JsonValue) -> String {
-  do_to_json(json_value)
-  |> doc.to_string(80)
+const json_names = FunctionNames(
+  null: "json.null",
+  string: "json.string",
+  int: "json.int",
+  float: "json.float",
+  preprocessed_array: "json.preprocessed_array",
+  array: "json.array",
+  object: "json.object",
+  bool: "json.bool",
+)
+
+const json_value_names = FunctionNames(
+  null: "json_value.null",
+  string: "json_value.string",
+  int: "json_value.int",
+  float: "json_value.float",
+  preprocessed_array: "json_value.preprocessed_array",
+  array: "json_value.array",
+  object: "json_value.object",
+  bool: "json_value.bool",
+)
+
+/// Generates formatted Gleam source that reconstructs a JSON value with `gleam/json`.
+pub fn to_json_code(json_value: JsonValue) -> String {
+  do_to_json(json_value, json_names)
+  |> doc.to_string(120)
 }
 
-fn do_to_json(json_value: JsonValue) -> Document {
+/// Generates formatted Gleam source that reconstructs a JSON value with `json_value`.
+pub fn to_json_value_code(json_value: JsonValue) -> String {
+  do_to_json(json_value, json_value_names)
+  |> doc.to_string(120)
+}
+
+type FunctionNames {
+  FunctionNames(
+    null: String,
+    string: String,
+    int: String,
+    float: String,
+    preprocessed_array: String,
+    array: String,
+    object: String,
+    bool: String,
+  )
+}
+
+fn do_to_json(
+  json_value: JsonValue,
+  function_names: FunctionNames,
+) -> Document {
   case json_value {
-    json_value.Null -> doc.from_string("json.null()")
+    json_value.Null -> doc.from_string(function_names.null <> "()")
     json_value.String(value) ->
-      doc.concat([
-        doc.from_string("json.string("),
-        quoted_string(value),
-        doc.from_string(")"),
-      ])
+      call_doc(function_names.string, [quoted_string(value)])
     json_value.Int(value) ->
-      call_doc("json.int", int.to_string(value) |> doc.from_string |> list.wrap)
+      call_doc(
+        function_names.int,
+        int.to_string(value) |> doc.from_string |> list.wrap,
+      )
     json_value.Bool(value) ->
       call_doc(
-        "json.bool",
+        function_names.bool,
         bool.to_string(value) |> doc.from_string |> list.wrap,
       )
     json_value.Float(value) ->
       call_doc(
-        "json.float",
+        function_names.float,
         float.to_string(value) |> doc.from_string |> list.wrap,
       )
     json_value.Array(values) -> {
       case classify_array(values) {
-        Empty -> doc.from_string("json.preprossed_array([])")
+        Empty -> doc.from_string(function_names.preprocessed_array <> "([])")
         PreprocessedArray ->
-          list.map(values, do_to_json)
+          list.map(values, do_to_json(_, function_names))
           |> doc.concat_join([doc.from_string(","), doc.space])
           |> doc.prepend_docs([
-            doc.from_string("json.preprossed_array(["),
-            doc.space,
+            doc.from_string(function_names.preprocessed_array <> "(["),
+            doc.soft_break,
           ])
           |> doc.nest(2)
-          |> doc.append_docs([doc.space, doc.from_string("])")])
+          |> doc.append_docs([doc.soft_break, doc.from_string("])")])
           |> doc.group
         Array(literals:, kind:) ->
           list.map(literals, doc.from_string)
           |> doc.concat_join([doc.from_string(","), doc.space])
           |> doc.prepend_docs([
-            doc.from_string("json.array(["),
-            doc.space,
+            doc.from_string(function_names.array <> "(["),
+            doc.soft_break,
           ])
           |> doc.nest(2)
           |> doc.append_docs([
@@ -127,7 +172,7 @@ fn do_to_json(json_value: JsonValue) -> Document {
         doc.concat_join(
           [
             quoted_string(name),
-            do_to_json(value),
+            do_to_json(value, function_names),
           ],
           [doc.from_string(","), doc.space],
         )
@@ -137,9 +182,12 @@ fn do_to_json(json_value: JsonValue) -> Document {
       |> dict.to_list
       |> list.map(field)
       |> doc.concat_join([doc.from_string(","), doc.space])
-      |> doc.prepend_docs([doc.from_string("json.object(["), doc.space])
+      |> doc.prepend_docs([
+        doc.from_string(function_names.object <> "(["),
+        doc.soft_break,
+      ])
       |> doc.nest(2)
-      |> doc.append_docs([doc.space, doc.from_string("])")])
+      |> doc.append_docs([doc.soft_break, doc.from_string("])")])
       |> doc.group
     }
   }
@@ -198,15 +246,33 @@ fn classify_array_loop(
   }
 }
 
+/// Escapes a string as a quoted Gleam string literal.
+@internal
 pub fn gleam_escape(input: String) -> String {
-  "\""
-  <> input
-  |> string.replace("\\", "\\\\")
-  |> string.replace("\"", "\\\"")
-  |> string.replace("\n", "\\n")
-  |> string.replace("\r", "\\r")
-  |> string.replace("\t", "\\t")
-  <> "\""
+  let escaped = gleam_escape_loop(<<input:utf8>>, <<>>)
+  // The loop starts with UTF-8 and only appends UTF-8 literals or codepoints, so
+  // turning the bit array back into a string is safe.
+  let assert Ok(escaped) = bit_array.to_string(escaped)
+  "\"" <> escaped <> "\""
+}
+
+fn gleam_escape_loop(input: BitArray, escaped: BitArray) -> BitArray {
+  case input {
+    <<>> -> escaped
+    <<"\\":utf8, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, "\\\\":utf8>>)
+    <<"\"":utf8, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, "\\\"":utf8>>)
+    <<"\n":utf8, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, "\\n":utf8>>)
+    <<"\r":utf8, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, "\\r":utf8>>)
+    <<"\t":utf8, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, "\\t":utf8>>)
+    <<codepoint:utf8_codepoint, rest:bytes>> ->
+      gleam_escape_loop(rest, <<escaped:bits, codepoint:utf8_codepoint>>)
+    bits -> gleam_escape_loop(<<>>, <<escaped:bits, bits:bits>>)
+  }
 }
 
 fn parenthesise(document: Document, open: String, close: String) -> Document {

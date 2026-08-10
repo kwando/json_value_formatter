@@ -2,30 +2,18 @@
 version: 2.0.2
 title: to_json_complex
 ---
-json.preprossed_array([
+json.preprocessed_array([
   json.object([
     #(
       "batters",
       json.object([
         #(
           "batter",
-          json.preprossed_array([
-            json.object([
-              #("id", json.string("1001")),
-              #("type", json.string("Regular"))
-            ]),
-            json.object([
-              #("id", json.string("1002")),
-              #("type", json.string("Chocolate"))
-            ]),
-            json.object([
-              #("id", json.string("1003")),
-              #("type", json.string("Blueberry"))
-            ]),
-            json.object([
-              #("id", json.string("1004")),
-              #("type", json.string("Devil's Food"))
-            ])
+          json.preprocessed_array([
+            json.object([#("id", json.string("1001")), #("type", json.string("Regular"))]),
+            json.object([#("id", json.string("1002")), #("type", json.string("Chocolate"))]),
+            json.object([#("id", json.string("1003")), #("type", json.string("Blueberry"))]),
+            json.object([#("id", json.string("1004")), #("type", json.string("Devil's Food"))])
           ])
         )
       ])
@@ -35,35 +23,14 @@ json.preprossed_array([
     #("ppu", json.float(0.55)),
     #(
       "topping",
-      json.preprossed_array([
-        json.object([
-          #("id", json.string("5001")),
-          #("type", json.string("None"))
-        ]),
-        json.object([
-          #("id", json.string("5002")),
-          #("type", json.string("Glazed"))
-        ]),
-        json.object([
-          #("id", json.string("5005")),
-          #("type", json.string("Sugar"))
-        ]),
-        json.object([
-          #("id", json.string("5007")),
-          #("type", json.string("Powdered Sugar"))
-        ]),
-        json.object([
-          #("id", json.string("5006")),
-          #("type", json.string("Chocolate with Sprinkles"))
-        ]),
-        json.object([
-          #("id", json.string("5003")),
-          #("type", json.string("Chocolate"))
-        ]),
-        json.object([
-          #("id", json.string("5004")),
-          #("type", json.string("Maple"))
-        ])
+      json.preprocessed_array([
+        json.object([#("id", json.string("5001")), #("type", json.string("None"))]),
+        json.object([#("id", json.string("5002")), #("type", json.string("Glazed"))]),
+        json.object([#("id", json.string("5005")), #("type", json.string("Sugar"))]),
+        json.object([#("id", json.string("5007")), #("type", json.string("Powdered Sugar"))]),
+        json.object([#("id", json.string("5006")), #("type", json.string("Chocolate with Sprinkles"))]),
+        json.object([#("id", json.string("5003")), #("type", json.string("Chocolate"))]),
+        json.object([#("id", json.string("5004")), #("type", json.string("Maple"))])
       ])
     ),
     #("type", json.string("donut"))
@@ -74,12 +41,7 @@ json.preprossed_array([
       json.object([
         #(
           "batter",
-          json.preprossed_array([
-            json.object([
-              #("id", json.string("1001")),
-              #("type", json.string("Regular"))
-            ])
-          ])
+          json.preprocessed_array([json.object([#("id", json.string("1001")), #("type", json.string("Regular"))])])
         )
       ])
     ),
@@ -88,27 +50,12 @@ json.preprossed_array([
     #("ppu", json.float(0.55)),
     #(
       "topping",
-      json.preprossed_array([
-        json.object([
-          #("id", json.string("5001")),
-          #("type", json.string("None"))
-        ]),
-        json.object([
-          #("id", json.string("5002")),
-          #("type", json.string("Glazed"))
-        ]),
-        json.object([
-          #("id", json.string("5005")),
-          #("type", json.string("Sugar"))
-        ]),
-        json.object([
-          #("id", json.string("5003")),
-          #("type", json.string("Chocolate"))
-        ]),
-        json.object([
-          #("id", json.string("5004")),
-          #("type", json.string("Maple"))
-        ])
+      json.preprocessed_array([
+        json.object([#("id", json.string("5001")), #("type", json.string("None"))]),
+        json.object([#("id", json.string("5002")), #("type", json.string("Glazed"))]),
+        json.object([#("id", json.string("5005")), #("type", json.string("Sugar"))]),
+        json.object([#("id", json.string("5003")), #("type", json.string("Chocolate"))]),
+        json.object([#("id", json.string("5004")), #("type", json.string("Maple"))])
       ])
     ),
     #("type", json.string("donut"))
@@ -119,15 +66,9 @@ json.preprossed_array([
       json.object([
         #(
           "batter",
-          json.preprossed_array([
-            json.object([
-              #("id", json.string("1001")),
-              #("type", json.string("Regular"))
-            ]),
-            json.object([
-              #("id", json.string("1002")),
-              #("type", json.string("Chocolate"))
-            ])
+          json.preprocessed_array([
+            json.object([#("id", json.string("1001")), #("type", json.string("Regular"))]),
+            json.object([#("id", json.string("1002")), #("type", json.string("Chocolate"))])
           ])
         )
       ])
@@ -137,30 +78,14 @@ json.preprossed_array([
     #("ppu", json.float(0.55)),
     #(
       "topping",
-      json.preprossed_array([
-        json.object([
-          #("id", json.string("5001")),
-          #("type", json.string("None"))
-        ]),
-        json.object([
-          #("id", json.string("5002")),
-          #("type", json.string("Glazed"))
-        ]),
-        json.object([
-          #("id", json.string("5003")),
-          #("type", json.string("Chocolate"))
-        ]),
-        json.object([
-          #("id", json.string("5004")),
-          #("type", json.string("Maple"))
-        ])
+      json.preprocessed_array([
+        json.object([#("id", json.string("5001")), #("type", json.string("None"))]),
+        json.object([#("id", json.string("5002")), #("type", json.string("Glazed"))]),
+        json.object([#("id", json.string("5003")), #("type", json.string("Chocolate"))]),
+        json.object([#("id", json.string("5004")), #("type", json.string("Maple"))])
       ])
     ),
     #("type", json.string("donut"))
   ]),
-  json.preprossed_array([
-    json.object([
-      #("scores", json.array([ 1, 23, 424, 241, 13, 42, 2123 ], json.int))
-    ])
-  ])
+  json.preprocessed_array([json.object([#("scores", json.array([1, 23, 424, 241, 13, 42, 2123 ], json.int))])])
 ])

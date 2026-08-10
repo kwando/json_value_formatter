@@ -1,0 +1,98 @@
+---
+version: 2.0.2
+title: to_json_value_complex
+---
+json_value.preprocessed_array([
+  json_value.object([
+    #(
+      "batters",
+      json_value.object([
+        #(
+          "batter",
+          json_value.preprocessed_array([
+            json_value.object([#("id", json_value.string("1001")), #("type", json_value.string("Regular"))]),
+            json_value.object([#("id", json_value.string("1002")), #("type", json_value.string("Chocolate"))]),
+            json_value.object([#("id", json_value.string("1003")), #("type", json_value.string("Blueberry"))]),
+            json_value.object([#("id", json_value.string("1004")), #("type", json_value.string("Devil's Food"))])
+          ])
+        )
+      ])
+    ),
+    #("id", json_value.string("0001")),
+    #("name", json_value.string("Cake")),
+    #("ppu", json_value.float(0.55)),
+    #(
+      "topping",
+      json_value.preprocessed_array([
+        json_value.object([#("id", json_value.string("5001")), #("type", json_value.string("None"))]),
+        json_value.object([#("id", json_value.string("5002")), #("type", json_value.string("Glazed"))]),
+        json_value.object([#("id", json_value.string("5005")), #("type", json_value.string("Sugar"))]),
+        json_value.object([#("id", json_value.string("5007")), #("type", json_value.string("Powdered Sugar"))]),
+        json_value.object([
+          #("id", json_value.string("5006")),
+          #("type", json_value.string("Chocolate with Sprinkles"))
+        ]),
+        json_value.object([#("id", json_value.string("5003")), #("type", json_value.string("Chocolate"))]),
+        json_value.object([#("id", json_value.string("5004")), #("type", json_value.string("Maple"))])
+      ])
+    ),
+    #("type", json_value.string("donut"))
+  ]),
+  json_value.object([
+    #(
+      "batters",
+      json_value.object([
+        #(
+          "batter",
+          json_value.preprocessed_array([
+            json_value.object([#("id", json_value.string("1001")), #("type", json_value.string("Regular"))])
+          ])
+        )
+      ])
+    ),
+    #("id", json_value.string("0002")),
+    #("name", json_value.string("Raised")),
+    #("ppu", json_value.float(0.55)),
+    #(
+      "topping",
+      json_value.preprocessed_array([
+        json_value.object([#("id", json_value.string("5001")), #("type", json_value.string("None"))]),
+        json_value.object([#("id", json_value.string("5002")), #("type", json_value.string("Glazed"))]),
+        json_value.object([#("id", json_value.string("5005")), #("type", json_value.string("Sugar"))]),
+        json_value.object([#("id", json_value.string("5003")), #("type", json_value.string("Chocolate"))]),
+        json_value.object([#("id", json_value.string("5004")), #("type", json_value.string("Maple"))])
+      ])
+    ),
+    #("type", json_value.string("donut"))
+  ]),
+  json_value.object([
+    #(
+      "batters",
+      json_value.object([
+        #(
+          "batter",
+          json_value.preprocessed_array([
+            json_value.object([#("id", json_value.string("1001")), #("type", json_value.string("Regular"))]),
+            json_value.object([#("id", json_value.string("1002")), #("type", json_value.string("Chocolate"))])
+          ])
+        )
+      ])
+    ),
+    #("id", json_value.string("0003")),
+    #("name", json_value.string("Old Fashioned")),
+    #("ppu", json_value.float(0.55)),
+    #(
+      "topping",
+      json_value.preprocessed_array([
+        json_value.object([#("id", json_value.string("5001")), #("type", json_value.string("None"))]),
+        json_value.object([#("id", json_value.string("5002")), #("type", json_value.string("Glazed"))]),
+        json_value.object([#("id", json_value.string("5003")), #("type", json_value.string("Chocolate"))]),
+        json_value.object([#("id", json_value.string("5004")), #("type", json_value.string("Maple"))])
+      ])
+    ),
+    #("type", json_value.string("donut"))
+  ]),
+  json_value.preprocessed_array([
+    json_value.object([#("scores", json_value.array([1, 23, 424, 241, 13, 42, 2123 ], json.int))])
+  ])
+])

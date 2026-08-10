@@ -13,19 +13,26 @@ pub fn main() -> Nil {
 
 pub fn pretty_json_null_test() {
   json_value.null
-  |> json_value_formatter.pretty_json_string()
+  |> json_value_formatter.to_pretty_json_string()
   |> birdie.snap("pretty_json_null")
 }
 
 pub fn pretty_json_string_test() {
   json_value.string("hello \"world")
-  |> json_value_formatter.pretty_json_string()
+  |> json_value_formatter.to_pretty_json_string()
   |> birdie.snap("pretty_json_string")
+}
+
+pub fn gleam_escape_test() {
+  let input = "\\\"\n\r\tHello, world!"
+  let expected = "\"\\\\\\\"\\n\\r\\tHello, world!\""
+
+  assert json_value_formatter.gleam_escape(input) == expected
 }
 
 pub fn pretty_json_empty_object_test() {
   json_value.object([])
-  |> json_value_formatter.pretty_json_string()
+  |> json_value_formatter.to_pretty_json_string()
   |> birdie.snap("pretty_json_empty_object")
 }
 
@@ -121,7 +128,7 @@ pub fn pretty_json_object_test() {
       ]),
     ),
   ])
-  |> json_value_formatter.pretty_json_string()
+  |> json_value_formatter.to_pretty_json_string()
   |> birdie.snap("pretty_json_complex_object")
 }
 
@@ -129,7 +136,7 @@ pub fn pretty_json_complex_test() {
   let name = "complex"
   let assert Ok(data) = simplifile.read("test/fixtures/" <> name <> ".json")
   let assert Ok(json) = json.parse(data, json_value.decoder())
-  json_value_formatter.pretty_json_string(json)
+  json_value_formatter.to_pretty_json_string(json)
   |> birdie.snap("pretty_json_" <> name)
 }
 
@@ -137,12 +144,24 @@ pub fn to_json_complex_test() {
   let name = "complex"
   let assert Ok(data) = simplifile.read("test/fixtures/" <> name <> ".json")
   let assert Ok(json) = json.parse(data, json_value.decoder())
-  let code = json_value_formatter.to_json(json)
+  let code = json_value_formatter.to_json_code(json)
 
   assert_valid_gleam(code)
 
   code
   |> birdie.snap("to_json_" <> name)
+}
+
+pub fn to_json_value_complex_test() {
+  let name = "complex"
+  let assert Ok(data) = simplifile.read("test/fixtures/" <> name <> ".json")
+  let assert Ok(json) = json.parse(data, json_value.decoder())
+  let code = json_value_formatter.to_json_value_code(json)
+
+  assert_valid_gleam(code)
+
+  code
+  |> birdie.snap("to_json_value_" <> name)
 }
 
 pub fn assert_valid_gleam(code: String) {
