@@ -32,6 +32,10 @@ source using `json_value`.
 
 API documentation is available at <https://json-value-formatter.hexdocs.pm/>.
 
+## License
+
+MIT. See [LICENSE](LICENSE).
+
 ## Development
 
 ```sh
