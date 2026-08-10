@@ -20,21 +20,14 @@ title: pretty_json_complex
       { "id": "5002", "type": "Glazed" },
       { "id": "5005", "type": "Sugar" },
       { "id": "5007", "type": "Powdered Sugar" },
-      {
-        "id": "5006",
-        "type": "Chocolate with Sprinkles"
-      },
+      { "id": "5006", "type": "Chocolate with Sprinkles" },
       { "id": "5003", "type": "Chocolate" },
       { "id": "5004", "type": "Maple" }
     ],
     "type": "donut"
   },
   {
-    "batters": {
-      "batter": [
-        { "id": "1001", "type": "Regular" }
-      ]
-    },
+    "batters": { "batter": [ { "id": "1001", "type": "Regular" } ] },
     "id": "0002",
     "name": "Raised",
     "ppu": 0.55,
@@ -65,9 +58,5 @@ title: pretty_json_complex
     ],
     "type": "donut"
   },
-  [
-    {
-      "scores": [ 1, 23, 424, 241, 13, 42, 2123 ]
-    }
-  ]
+  [ { "scores": [ 1, 23, 424, 241, 13, 42, 2123 ] } ]
 ]

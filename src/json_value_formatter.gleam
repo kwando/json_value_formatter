@@ -7,10 +7,10 @@ import gleam/list
 import gleam/string
 import json_value.{type JsonValue}
 
-/// Renders a JSON value as formatted JSON with a line width of 50 characters.
+/// Renders a JSON value as formatted JSON with a line width of 80 characters.
 pub fn to_pretty_json_string(json_value: JsonValue) -> String {
   do_pretty_json_string(json_value, 0)
-  |> doc.to_string(50)
+  |> doc.to_string(80)
 }
 
 fn do_pretty_json_string(json_value: JsonValue, depth: Int) -> doc.Document {
