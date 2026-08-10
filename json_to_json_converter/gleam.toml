@@ -23,3 +23,7 @@ json_value = ">= 1.1.0 and < 2.0.0"
 
 [dev_dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
+
+
+[tools.lustre.html]
+title = "json-to-json-converter"
