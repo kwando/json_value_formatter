@@ -5,35 +5,44 @@ import json_value
 import json_value_formatter
 import lustre
 import lustre/attribute.{class}
+import lustre/effect.{type Effect}
 import lustre/element.{type Element}
 import lustre/element/html
 import lustre/event
 
 pub fn main() {
-  let app = lustre.simple(init:, update:, view:)
+  let app = lustre.application(init:, update:, view:)
 
   lustre.start(app, "#app", [])
 }
 
-fn update(model: Model, msg: Msg) -> Model {
+fn update(model: Model, msg: Msg) -> #(Model, Effect(Msg)) {
   case msg {
-    UserUpdatedInput(input) ->
-      model
-      |> update_input(input)
-      |> store_input
+    UserUpdatedInput(input) -> {
+      let model =
+        model
+        |> update_input(input)
+        |> store_input
+
+      #(model, enable_tabs_for_textare("input"))
+    }
 
     UserClickedFormatJson -> {
       case format_json(model.input) {
-        Ok(formatted_json) ->
-          Model(..model, input: formatted_json)
-          |> store_input
-        Error(_) -> model
+        Ok(formatted_json) -> {
+          let model =
+            Model(..model, input: formatted_json)
+            |> store_input
+
+          #(model, effect.none())
+        }
+        Error(_) -> #(model, effect.none())
       }
     }
     UserClickedCopyToClipboard -> {
       copy_text_to_clipboard(model.output)
       |> echo
-      model
+      #(model, effect.none())
     }
   }
 }
@@ -49,6 +58,16 @@ fn get_session_storage(key: String) -> Result(String, Nil)
 
 @external(javascript, "./json_to_json_converter.ffi.mjs", "copyTextToClipboard")
 fn copy_text_to_clipboard(text: String) -> Nil
+
+@external(javascript, "./json_to_json_converter.ffi.mjs", "enableTab")
+fn enable_tabs(id: String) -> Nil
+
+fn enable_tabs_for_textare(id: String) {
+  effect.after_paint(fn(_, _) {
+    enable_tabs(id)
+    Nil
+  })
+}
 
 fn store_input(model: Model) -> Model {
   set_session_storage("input", model.input)
@@ -77,10 +96,13 @@ pub type Model {
   Model(input: String, output: String, valid_json: Bool)
 }
 
-fn init(_list: List(a)) -> Model {
+fn init(_list: List(a)) -> #(Model, Effect(Msg)) {
   let input = get_session_storage("input") |> result.unwrap("")
-  Model(input: "", output: "", valid_json: False)
-  |> update_input(input)
+  let model =
+    Model(input: "", output: "", valid_json: False)
+    |> update_input(input)
+
+  #(model, effect.none())
 }
 
 fn view(model: Model) -> Element(Msg) {
@@ -98,6 +120,10 @@ fn view(model: Model) -> Element(Msg) {
             attribute.autofocus(True),
             attribute.placeholder("Write some JSON here"),
             event.on_input(UserUpdatedInput),
+            attribute.spellcheck(False),
+            attribute.autocapitalize("none"),
+            attribute.autocorrect(False),
+            attribute.id("input"),
           ],
           model.input,
         ),
@@ -122,6 +148,15 @@ fn view(model: Model) -> Element(Msg) {
         ],
         [
           html.text("Copy to Clipboard"),
+        ],
+      ),
+      html.div(
+        [
+          class("absolute bg-red-500 text-white p-4"),
+          attribute.classes([#("hidden", model.valid_json || model.input == "")]),
+        ],
+        [
+          html.text("The JSON on the left is invalid"),
         ],
       ),
       html.pre([class("h-full text-sm")], [html.text(model.output)]),
