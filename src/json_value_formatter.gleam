@@ -1,10 +1,10 @@
 import glam/doc.{type Document}
-import gleam/bit_array
 import gleam/bool
 import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/list
+import gleam/string
 import json_value.{type JsonValue}
 
 /// Renders a JSON value as formatted JSON with a line width of 50 characters.
@@ -249,30 +249,14 @@ fn classify_array_loop(
 /// Escapes a string as a quoted Gleam string literal.
 @internal
 pub fn gleam_escape(input: String) -> String {
-  let escaped = gleam_escape_loop(<<input:utf8>>, <<>>)
-  // The loop starts with UTF-8 and only appends UTF-8 literals or codepoints, so
-  // turning the bit array back into a string is safe.
-  let assert Ok(escaped) = bit_array.to_string(escaped)
-  "\"" <> escaped <> "\""
-}
-
-fn gleam_escape_loop(input: BitArray, escaped: BitArray) -> BitArray {
-  case input {
-    <<>> -> escaped
-    <<"\\":utf8, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, "\\\\":utf8>>)
-    <<"\"":utf8, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, "\\\"":utf8>>)
-    <<"\n":utf8, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, "\\n":utf8>>)
-    <<"\r":utf8, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, "\\r":utf8>>)
-    <<"\t":utf8, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, "\\t":utf8>>)
-    <<codepoint:utf8_codepoint, rest:bytes>> ->
-      gleam_escape_loop(rest, <<escaped:bits, codepoint:utf8_codepoint>>)
-    bits -> gleam_escape_loop(<<>>, <<escaped:bits, bits:bits>>)
-  }
+  "\""
+  <> input
+  |> string.replace("\\", "\\\\")
+  |> string.replace("\"", "\\\"")
+  |> string.replace("\n", "\\n")
+  |> string.replace("\r", "\\r")
+  |> string.replace("\t", "\\t")
+  <> "\""
 }
 
 fn parenthesise(document: Document, open: String, close: String) -> Document {
